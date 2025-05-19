@@ -2,12 +2,9 @@
  * @type {import("prettier").Config}
  */
 export default {
-  semi: true,
-  tabWidth: 2,
-  useTabs: false,
-  printWidth: 80,
+  endOfLine: "lf",
+  semi: false,
   singleQuote: false,
-  arrowParens: "always",
+  tabWidth: 2,
   trailingComma: "es5",
-  singleAttributePerLine: true,
 };
