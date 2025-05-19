@@ -30,7 +30,7 @@
     "ts-node": "^10.9.1",
     "ws": "^8.8.1",
     "@hono/node-server": "^1.13.7",
-    "@hono/zod-validator": "^0.4.3",
+    "@hono/zod-validator": "^0.5.0",
     "@prisma/client": "^6.8.2",
     "hono": "^4.6.15",
     "hono-rate-limiter": "^0.4.2",
