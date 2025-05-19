@@ -7,6 +7,8 @@ import corsConfig from "./config/cors"
 import { serve } from "@hono/node-server"
 import { cacheControlMiddleware } from "./middleware/cache"
 import { ratelimit } from "./config/ratelimit"
+import { cacheConfigSetter } from "./middleware/cache"
+import anilistRouter from "./routes/meta/anilist"
 
 const BASE_PATH = "/api" as const
 const PORT: number = Number(process.env.PORT) || 4000
@@ -24,6 +26,11 @@ if (ISNT_PERSONAL_DEPLOYMENT) {
 }
 
 app.get("/", async (c) => c.text("Running"))
+
+app.use(cacheConfigSetter(BASE_PATH.length))
+
+// meta routes
+app.basePath(BASE_PATH).route("/meta/anilist", anilistRouter)
 
 if (!Boolean(process.env?.VERCEL_DEPLOYMENT)) {
   serve({
