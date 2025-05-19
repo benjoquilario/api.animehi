@@ -9,6 +9,7 @@ import { cacheControlMiddleware } from "./middleware/cache"
 import { ratelimit } from "./config/ratelimit"
 import { cacheConfigSetter } from "./middleware/cache"
 import anilistRouter from "./routes/meta/anilist"
+import { hianimeRouter } from "./routes/anime/hianime"
 
 const BASE_PATH = "/api" as const
 const PORT: number = Number(process.env.PORT) || 4000
@@ -31,6 +32,9 @@ app.use(cacheConfigSetter(BASE_PATH.length))
 
 // meta routes
 app.basePath(BASE_PATH).route("/meta/anilist", anilistRouter)
+
+// anime routes
+app.basePath(BASE_PATH).route("/anime/hianime", hianimeRouter)
 
 if (!Boolean(process.env?.VERCEL_DEPLOYMENT)) {
   serve({
