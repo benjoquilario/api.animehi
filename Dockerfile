@@ -20,17 +20,12 @@ ARG PORT=3000
 
 # ARG NODE_ENV=production
 # to be able to run tests (for example in CI), do not set production as environment
-ENV NODE_ENV=${NODE_ENV}
-ENV PORT=${PORT}
-ENV REDIS_HOST=${REDIS_HOST}
-ENV REDIS_PORT=${REDIS_PORT}
-ENV REDIS_PASSWORD=${REDIS_PASSWORD}
 
 ENV NPM_CONFIG_LOGLEVEL=warn
 
 # copy project definition/dependencies files, for better reuse of layers
 COPY --chown=nodejs:nodejs package*.json ./
-COPY --chown=nodejs:nodejs prisma ./prisma
+COPY prisma ./prisma/
 
 # install dependencies here, for better reuse of layers
 RUN npm install && npm update && npm cache clean --force
