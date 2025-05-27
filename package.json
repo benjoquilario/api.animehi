@@ -20,7 +20,7 @@
   "dependencies": {
     "@consumet/extensions": "github:consumet/consumet.ts",
     "@hono/node-server": "^1.13.7",
-    "@hono/zod-validator": "^0.4.3",
+    "@hono/zod-validator": "^0.6.0",
     "@prisma/client": "^6.8.2",
     "@types/node": "^18.11.17",
     "@types/ws": "^8.5.3",
