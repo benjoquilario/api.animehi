@@ -61,3 +61,5 @@ if (!Boolean(VERCEL_DEPLOYMENT)) {
     }, interval)
   }
 }
+
+export default app
