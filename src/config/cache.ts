@@ -1,5 +1,6 @@
 import { config } from "dotenv"
 import { Redis } from "ioredis"
+import { env } from "./env"
 
 config()
 
@@ -11,7 +12,7 @@ export class APICache {
   static CACHE_EXPIRY_HEADER_NAME = "X-ANI-CACHE-EXPIRY" as const
 
   constructor() {
-    const redisConnURL = process.env?.REDIS_CONN_URL
+    const redisConnURL = env.REDIS_CONN_URL
     this.isOptional = !Boolean(redisConnURL)
     this._client = this.isOptional ? null : new Redis(String(redisConnURL))
   }
