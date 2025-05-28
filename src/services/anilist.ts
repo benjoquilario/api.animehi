@@ -1,6 +1,4 @@
-import { config } from "dotenv"
-
-config()
+import { env } from "../config/env"
 
 export interface AnilistAuth {
   token_type: string
@@ -25,9 +23,9 @@ export const getAnilistAuth = async (code: string) => {
     },
     body: JSON.stringify({
       grant_type: "authorization_code",
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      redirect_uri: process.env.REDIRECT_URL, // http://your-api-url/api/auth/anilist/callback
+      client_id: env.ANILIST_CLIENT_ID,
+      client_secret: env.ANILIST_CLIENT_SECRET,
+      redirect_uri: env.REDIRECT_URL, // http://your-api-url/api/auth/anilist/callback
       code: code, // The Authorization Code received previously
     }),
   })
