@@ -1,23 +1,26 @@
 import https from "https"
-import { config } from "dotenv"
 import type { APIVariables } from "./config/variables"
 import { Hono } from "hono"
-import { logger } from "hono/logger"
 import corsConfig from "./config/cors"
 import { serve } from "@hono/node-server"
 import { cacheControlMiddleware } from "./middleware/cache"
 import { ratelimit } from "./config/ratelimit"
 import { cacheConfigSetter } from "./middleware/cache"
 import anilistRouter from "./routes/meta/anilist"
-import { hianimeRouter } from "./routes/anime/hianime"
+import animekaiRouter from "./routes/anime/animekai"
+import zoroRouter from "./routes/anime/zoro"
+import { logging } from "./middleware/logger"
+import { log } from "./config/logger"
+import { env } from "./config/env"
 
 const BASE_PATH = "/api" as const
-const PORT: number = Number(process.env.PORT) || 4000
-const HOSTNAME = process.env.HOSTNAME
+const PORT: number = Number(env.PORT) || 4000
+const HOSTNAME = env.HOSTNAME
+const VERCEL_DEPLOYMENT = env.VERCEL_DEPLOYMENT
 
 const app = new Hono<{ Variables: APIVariables }>()
 
-app.use(logger())
+app.use(logging)
 app.use(corsConfig)
 app.use(cacheControlMiddleware)
 
@@ -34,17 +37,16 @@ app.use(cacheConfigSetter(BASE_PATH.length))
 app.basePath(BASE_PATH).route("/meta/anilist", anilistRouter)
 
 // anime routes
-app.basePath(BASE_PATH).route("/anime/hianime", hianimeRouter)
+app.basePath(BASE_PATH).route("/anime/zoro", zoroRouter)
+app.basePath(BASE_PATH).route("/anime/animekai", animekaiRouter)
 
-if (!Boolean(process.env?.VERCEL_DEPLOYMENT)) {
+if (!Boolean(VERCEL_DEPLOYMENT)) {
   serve({
     port: PORT,
     fetch: app.fetch,
-  }).addListener("listening", () =>
-    console.info(
-      "\x1b[1;36m" + `aniwatch-api at http://localhost:${PORT}` + "\x1b[0m"
-    )
-  )
+  }).addListener("listening", () => {
+    log.info(`api.animehi RUNNING at http://localhost:${PORT}`)
+  })
 
   // NOTE: remove the `if` block below for personal deployments
   if (ISNT_PERSONAL_DEPLOYMENT) {
@@ -52,9 +54,9 @@ if (!Boolean(process.env?.VERCEL_DEPLOYMENT)) {
 
     // don't sleep
     setInterval(() => {
-      console.log("aniwatch-api HEALTH_CHECK at", new Date().toISOString())
+      log.info("api.animehi HEALTH_CHECK at", new Date().toISOString())
       https.get(`https://${HOSTNAME}/health`).on("error", (err) => {
-        console.error(err.message)
+        log.error(err.message.trim())
       })
     }, interval)
   }
