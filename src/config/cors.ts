@@ -1,11 +1,9 @@
-import { config } from "dotenv"
 import { cors } from "hono/cors"
+import { env } from "./env"
 
-config()
-
-const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
-  ? process.env.CORS_ALLOWED_ORIGINS.split(",")
-  : ["http://localhost:4000", "*"]
+const allowedOrigins = env.CORS_ALLOWED_ORIGINS
+  ? env.CORS_ALLOWED_ORIGINS.split(",")
+  : ["http://localhost:5173", "*"]
 
 const corsConfig = cors({
   allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
