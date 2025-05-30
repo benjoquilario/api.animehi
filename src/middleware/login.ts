@@ -1,8 +1,8 @@
 import type { Context } from "hono"
-import db from "../config/database.js"
-import { type AnilistAuth } from "../services/anilist.js"
-import type { AnilistUser } from "../services/anilist.js"
-import { env } from "../config/env.js"
+import db from "../config/database"
+import { type AnilistAuth } from "../services/anilist"
+import type { AnilistUser } from "../services/anilist"
+import { env } from "../config/env"
 import jwt from "jsonwebtoken"
 import { setCookie } from "hono/cookie"
 
@@ -56,17 +56,13 @@ export const loginOauth = async (c: Context) => {
   }
 
   // Create a cookie for the user
-  const token = jwt.sign(
-    { sub: userId, name: username },
-    process.env.JWT_SECRET!,
-    {
-      expiresIn: "90d",
-    }
-  )
+  const token = jwt.sign({ sub: userId, name: username }, env.JWT_SECRET, {
+    expiresIn: "2h",
+  })
 
   setCookie(c, "refreshToken", token, {
     secure: true,
-    maxAge: 1000 * 60 * 60,
+    maxAge: 1000 * 120 * 60,
     httpOnly: true,
     sameSite: "none",
   })

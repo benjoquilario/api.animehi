@@ -18,6 +18,18 @@ export const cacheControlMiddleware: MiddlewareHandler = async (c, next) => {
   await next()
 }
 
+// validateApikeyInDatabase
+
+export const validateApiKey: MiddlewareHandler = async (c, next) => {
+  const apiKey = c.req.header("x-api-key")
+
+  if (!apiKey) {
+    return c.json({ error: "API key is required" }, 401)
+  }
+
+  await next()
+}
+
 export function cacheConfigSetter(keySliceIndex: number): MiddlewareHandler {
   return async (c, next) => {
     const { pathname, search } = new URL(c.req.url)

@@ -14,7 +14,7 @@ export const refresh = async (c: Context) => {
 
     const user = await db.user.findUnique({
       where: {
-        id: decoded.sub as string,
+        id: `${decoded.sub}`,
       },
     })
 
