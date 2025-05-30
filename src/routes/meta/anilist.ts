@@ -8,6 +8,12 @@ import { Genres, SubOrSub } from "@consumet/extensions/dist/models/index.js"
 import { StreamingServers } from "@consumet/extensions/dist/models"
 
 import { cache } from "../../config/cache"
+import { getAnimeEpisodeSources } from "../../scraper/hianime-srcs"
+import {
+  AnimeServers,
+  ScrapedAnimeEpisodesSources,
+  Servers,
+} from "../../types/anime"
 
 const anilistRouter = new Hono<{ Variables: APIVariables }>()
   .get("/", async (c) => {
@@ -202,6 +208,52 @@ const anilistRouter = new Hono<{ Variables: APIVariables }>()
     )
 
     return c.json({ success: true, data }, { status: 200 })
+  })
+  .get("/watch/v2/:episodeId", async (c) => {
+    const cacheConfig = c.get("CACHE_CONFIG")
+    const episodeId = decodeURIComponent(c.req.param("episodeId").trim())
+    const server = decodeURIComponent(
+      c.req.query("server") || Servers.VidStreaming
+    ) as AnimeServers
+    const category = decodeURIComponent(c.req.query("category") || "sub") as
+      | "sub"
+      | "dub"
+      | "raw"
+
+    const provider = decodeURIComponent(c.req.query("provider") || "")
+
+    try {
+      if (provider === "zoro") {
+        const formatEpisodeId = episodeId.replace("$episode$", "?ep=")
+
+        const data = await cache.getOrSet<ScrapedAnimeEpisodesSources>(
+          async () => getAnimeEpisodeSources(formatEpisodeId, server, category),
+          cacheConfig.key,
+          cacheConfig.duration
+        )
+
+        return c.json(
+          {
+            success: true,
+            data,
+          },
+          {
+            status: 200,
+          }
+        )
+      } else {
+        const anilist = generateAnilistMeta(provider)
+
+        const data = await cache.getOrSet(
+          async () => await anilist.fetchEpisodeSources(episodeId, server),
+          cacheConfig.key,
+          cacheConfig.duration
+        )
+        return c.json({ success: true, data: data }, { status: 200 })
+      }
+    } catch (error) {
+      return c.json({ success: false, message: error }, { status: 500 })
+    }
   })
   .get("/airing-schedule", async (c) => {
     const page = Number(c.req.query("page") || 1)
