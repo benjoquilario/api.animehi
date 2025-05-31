@@ -28,7 +28,7 @@ COPY --chown=nodejs:nodejs package*.json ./
 COPY prisma ./prisma/
 
 # install dependencies here, for better reuse of layers
-RUN npm install && npm update && npm cache clean
+RUN npm install && npm update && npm cache clean --force
 RUN npx prisma generate
 
 # copy all sources in the container (exclusions in .dockerignore file)
