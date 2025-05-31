@@ -26,7 +26,7 @@
     "@types/node": "^18.11.17",
     "@types/ws": "^8.5.3",
     "axios": "^1.7.9",
-    "chalk": "4.1.2",
+    "chalk": "5.4.1",
     "cheerio": "1.0.0",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.0.3",
