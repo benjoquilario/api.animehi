@@ -35,7 +35,7 @@ export const refresh = async (c: Context) => {
     const accessToken = jwt.sign(
       { sub: user.id, name: user.name },
       env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: "24h" }
     )
 
     // res.send({ accessToken, user });

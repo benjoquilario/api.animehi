@@ -57,12 +57,12 @@ export const loginOauth = async (c: Context) => {
 
   // Create a cookie for the user
   const token = jwt.sign({ sub: userId, name: username }, env.JWT_SECRET, {
-    expiresIn: "2h",
+    expiresIn: "24h",
   })
 
   setCookie(c, "refreshToken", token, {
     secure: true,
-    maxAge: 1000 * 120 * 60,
+    maxAge: 24 * 60 * 60, // 24 hours in seconds
     httpOnly: true,
     sameSite: "none",
   })
