@@ -26,6 +26,10 @@ model User {
   accounts Account[]
   sessions Session[]
 
+  comments        Comment[]
+  commentLikes    CommentLike[]
+  commentDislikes CommentDislike[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -67,4 +71,46 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Comment {
+  id             String           @id @default(cuid())
+  content        String
+  createdAt      DateTime         @default(now())
+  animeId        String
+  episodeId      String
+  updatedAt      DateTime         @updatedAt
+  episodeNumber  String
+  isEdited       Boolean?
+  title          String?
+  isSpoiler      Boolean          @default(false)
+  commentLike    CommentLike[]
+  commentDislike CommentDislike[]
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  commentId String
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+}
+
+model CommentDislike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  commentId String
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
 }

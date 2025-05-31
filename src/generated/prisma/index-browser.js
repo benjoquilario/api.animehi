@@ -162,6 +162,34 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
   expires: 'expires'
 };
 
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  animeId: 'animeId',
+  episodeId: 'episodeId',
+  updatedAt: 'updatedAt',
+  episodeNumber: 'episodeNumber',
+  isEdited: 'isEdited',
+  title: 'title',
+  isSpoiler: 'isSpoiler',
+  userId: 'userId'
+};
+
+exports.Prisma.CommentLikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  commentId: 'commentId',
+  userId: 'userId'
+};
+
+exports.Prisma.CommentDislikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  commentId: 'commentId',
+  userId: 'userId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -182,7 +210,10 @@ exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
   Session: 'Session',
-  VerificationToken: 'VerificationToken'
+  VerificationToken: 'VerificationToken',
+  Comment: 'Comment',
+  CommentLike: 'CommentLike',
+  CommentDislike: 'CommentDislike'
 };
 
 /**
