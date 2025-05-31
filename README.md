@@ -43,9 +43,11 @@
 
 All you gotta do is provide a client side the api will do the backend for your need
 
-- Out of the box anilist authentication
-- Comment section api
+- anilist authentication
+- Comment episode section api
 - Reply comment section api
+- like/unlike comment
+- like reply
 
 `Comming Soon`
 
@@ -118,7 +120,8 @@ More info can be found in the [`.env.example`](https://github.com//api.animehi/b
 - `CORS_ALLOWED_ORIGINS`: allowed origins, separated by commas and no spaces in between.
 - `VERCEL_DEPLOYMENT`: required for distinguishing Vercel deployment from other ones; set it to true or any other non-zero value.
 - `HOSTNAME`: set this to your api instance's hostname to enable rate limiting, don't have this value if you don't wish to rate limit.
-- `REDIS_CONN_URL`: this env is optional by default and can be set to utilize Redis caching functionality. It has to be a valid connection URL; otherwise, the Redis client can throw unexpected errors.
+- `UPSTASH_REDIS_URL`: this env is optional by default and can be set to utilize Redis caching functionality. It has to be a valid connection URL; otherwise, the Redis client can throw unexpected errors.
+- `UPSTASH_REDIS_TOKEN`: optional
 - `S_MAXAGE`: specifies the maximum amount of time (in seconds) a resource is considered fresh when served by a CDN cache.
 - `STALE_WHILE_REVALIDATE`: specifies the amount of time (in seconds) a resource is served stale while a new one is fetched.
 
