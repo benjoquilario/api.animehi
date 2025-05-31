@@ -1,22 +1,23 @@
-import { config } from "dotenv"
 import type { MiddlewareHandler } from "hono"
-
-config()
+import { createMiddleware } from "hono/factory"
+import { env } from "../config/env"
 
 import { APICache } from "../config/cache"
 
 // Define middleware to add Cache-Control header
-export const cacheControlMiddleware: MiddlewareHandler = async (c, next) => {
-  const sMaxAge = process.env.S_MAXAGE || "60"
-  const staleWhileRevalidate = process.env.STALE_WHILE_REVALIDATE || "30"
+export const cacheControlMiddleware: MiddlewareHandler = createMiddleware(
+  async (c, next) => {
+    const sMaxAge = env.S_MAXAGE || "60"
+    const staleWhileRevalidate = env.STALE_WHILE_REVALIDATE || "30"
 
-  c.header(
-    "Cache-Control",
-    `s-maxage=${sMaxAge}, stale-while-revalidate=${staleWhileRevalidate}`
-  )
+    c.header(
+      "Cache-Control",
+      `s-maxage=${sMaxAge}, stale-while-revalidate=${staleWhileRevalidate}`
+    )
 
-  await next()
-}
+    await next()
+  }
+)
 
 // validateApikeyInDatabase
 
@@ -30,8 +31,8 @@ export const validateApiKey: MiddlewareHandler = async (c, next) => {
   await next()
 }
 
-export function cacheConfigSetter(keySliceIndex: number): MiddlewareHandler {
-  return async (c, next) => {
+export const cacheConfigSetter = (keySliceIndex: number): MiddlewareHandler => {
+  return createMiddleware(async (c, next) => {
     const { pathname, search } = new URL(c.req.url)
 
     c.set("CACHE_CONFIG", {
@@ -43,5 +44,5 @@ export function cacheConfigSetter(keySliceIndex: number): MiddlewareHandler {
     })
 
     await next()
-  }
+  })
 }
