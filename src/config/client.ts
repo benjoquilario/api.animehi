@@ -7,7 +7,7 @@ import {
 } from "../utils/constants"
 
 const clientConfig: AxiosRequestConfig = {
-  timeout: 8000,
+  timeout: 10000,
   // baseURL: SRC_BASE_URL,
   headers: {
     Accept: ACCEPT_HEADER,
